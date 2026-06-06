@@ -1,0 +1,142 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 0px;
+}
+
+.footer {
+    background-color: #2d3056;
+    color: #fff;
+    font-size: 14px;
+}
+
+.medium {
+    font-size: 90%;
+    font-weight: 400;
+}
+
+.small {
+    font-size: 70%;
+    font-weight: 400;
+}
+
+.brand-logo {
+    width: 60px;
+    height: 36px;
+    float: left;
+    margin: 0px 5px 0px 5px;
+}
+
+.imageThumbnail-Original {
+    height: auto;
+    width: auto;
+}
+
+.imageThumbnail-Medium {
+    height: 80px;
+    width: 100px;
+}
+
+.imageThumbnail-Small {
+    height: 60px;
+    width: 80px;
+}
+
+.filter {
+    margin-bottom: 1.5rem;
+    padding: .5rem;
+    background: #e9ecef;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+}
+
+.page-header-row {
+    margin: 0;
+    padding: .25rem;
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+}
+
+.PageHeader {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #000;
+}
+
+.PageHeaderBordered {
+    font-size: 1rem;
+    font-weight: 400;
+    border-bottom: 1px solid #28a745;
+    text-transform: uppercase;
+}
+
+.ContentSection {
+    font-size: 1.25rem;
+    font-weight: 400;
+    margin-bottom: .25rem;
+}
+
+/*Site Anchors: Begin*/
+.nav-link {
+    display: block;
+    padding: 0.2rem .7rem;
+}
+
+a {
+    color: #2F5BA6;
+    text-decoration: none;
+}
+
+    a:hover {
+        color: #2F5BA6;
+        text-decoration: none;
+    }
+
+.breadcrumb-link {
+    color: #000;
+}
+
+    .breadcrumb-link:hover {
+        color: #000;
+    }
+
+.pagination-item.active .pagination-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #999ea1;
+    border-color: #999ea1;
+}
+
+.pagination-link {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #343a40;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+}
+
+    .pagination-link:hover {
+        z-index: 2;
+        color: #343a40;
+        text-decoration: none;
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+    }
+/*Site Anchors: End*/

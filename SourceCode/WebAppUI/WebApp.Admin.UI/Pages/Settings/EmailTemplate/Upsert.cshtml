@@ -1,0 +1,83 @@
+@page
+@model WebApp.Admin.UI.Pages.Settings.EmailTemplate.UpsertModel
+@{
+	ViewData["Title"] = "Update Email Template";
+}
+
+@section Styles
+{
+	<link rel="stylesheet" href="~/plugins/summernote/summernote-bs4.min.css" />
+}
+
+@section Scripts
+{
+	<script src="~/plugins/summernote/summernote-bs4.min.js"></script>
+
+	<script>
+	$(document).ready(function () {
+		$('.NoteArea').summernote(
+			{
+				height: 150
+			}
+		);
+	});
+	</script>
+
+	<partial name="_ValidationScriptsPartial" />
+}
+
+@section Breadcrumb
+{
+<li class="breadcrumb-item"><a asp-page="/Index" class="breadcrumb-link">Home</a></li>
+<li class="breadcrumb-item"><a asp-page="/Settings/EmailTemplate/List" class="breadcrumb-link" asp-route-c="set" asp-route-p="et">Email Template</a></li>
+<li class="breadcrumb-item active">@ViewData["Title"]</li>
+}
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+	<div class="alert alert-warning alert-dismissible fade show" role="alert">
+		@Html.Raw(Model.ErrorMessage)
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+}
+
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+	<div class="alert alert-success alert-dismissible fade show" role="alert">
+		@Html.Raw(Model.SuccessMessage)
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+}
+
+<form method="post">
+	<input asp-for="EmailTemplate.Id" type="hidden" />
+
+	<div class="form-group mb-3">
+		<label asp-for="EmailTemplate.Name" class="control-label"></label>
+		<input asp-for="EmailTemplate.Name" class="form-control" readonly />
+		<span asp-validation-for="EmailTemplate.Name" class="small text-danger"></span>
+	</div>
+
+	<div class="form-group mb-3">
+		<label asp-for="EmailTemplate.Variables" class="control-label"></label>
+		<input asp-for="EmailTemplate.Variables" class="form-control" readonly />
+		<span asp-validation-for="EmailTemplate.Variables" class="small text-danger"></span>
+	</div>
+
+	<div class="form-group mb-3">
+		<label asp-for="EmailTemplate.Subject" class="control-label"></label>
+		<input asp-for="EmailTemplate.Subject" class="form-control" />
+		<span asp-validation-for="EmailTemplate.Subject" class="small text-danger"></span>
+	</div>
+
+	<div class="form-group mb-3">
+		<label asp-for="EmailTemplate.Template" class="control-label"></label>
+		<textarea asp-for="EmailTemplate.Template" class="form-control NoteArea"></textarea>
+		<span asp-validation-for="EmailTemplate.Template" class="small text-danger"></span>
+	</div>
+
+	<div class="form-group">
+		<input type="submit" value="Update Email Template" class="btn btn-success me-2" />
+		<a asp-page="/Settings/EmailTemplate/List" asp-route-c="set" asp-route-p="et" class="btn btn-success">Back to List</a>
+	</div>
+</form>

@@ -1,0 +1,140 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 0px;
+}
+
+.masthead {
+    background-color: #2d3056;
+}
+
+.logo-header {
+    width: 100px;
+    height: 60px;
+}
+
+.company-header {
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.footer {
+    background-color: #2d3056;
+    color: #fff;
+    font-size: 14px;
+}
+
+.imageThumbnail-Original {
+    height: auto;
+    width: auto;
+}
+
+.imageThumbnail-Medium {
+    height: 80px;
+    width: 100px;
+}
+
+.imageThumbnail-Small {
+    height: 60px;
+    width: 80px;
+}
+
+.filter {
+    /*margin-top: 1rem;
+    margin-bottom: 1rem;*/
+    padding: .5rem;
+    background: #e9ecef;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+}
+
+.vertical {
+    vertical-align: middle !important;
+}
+
+.PageHeader {
+    font-size: 1rem;
+    font-weight: 400;
+    border-bottom: 1px solid #28a745;
+    text-transform: uppercase;
+}
+
+/*Site Anchors: Begin*/
+a {
+    color: #2F5BA6;
+    text-decoration: none;
+}
+
+    a:hover {
+        color: #2F5BA6;
+        text-decoration: none;
+    }
+
+.menu {
+    background-color: #265f32;
+    font-size: .75rem;
+    font-weight: 400;
+}
+
+    .menu:hover {
+        background-color: #265f32;
+        font-size: .75rem;
+        font-weight: 400;
+    }
+
+.menuitem {
+    color: #fff;
+}
+
+    .menuitem:hover {
+        color: #fff;
+    }
+
+.breadcrumb-link {
+    color: #000;
+}
+
+    .breadcrumb-link:hover {
+        color: #000;
+    }
+
+.pagination-item.active .pagination-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #999ea1;
+    border-color: #999ea1;
+}
+
+.pagination-link {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #343a40;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+}
+
+    .pagination-link:hover {
+        z-index: 2;
+        color: #343a40;
+        text-decoration: none;
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+    }
+/*Site Anchors: End*/

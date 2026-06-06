@@ -1,0 +1,112 @@
+@page
+@model WebApp.User.UI.Pages.Pie.ListModel
+@inject IConfiguration _config
+
+@{
+	ViewData["Title"] = "Pie List";
+}
+
+<!--Breadcrumb Row-->
+<div class="row mb-4">
+	<div class="col-12">
+		<ol class="breadcrumb my-0">
+			<li class="breadcrumb-item"><a asp-page="/Index" class="breadcrumb-link">Home</a></li>
+			<li class="breadcrumb-item active">@ViewData["Title"]</li>
+		</ol>
+	</div>
+</div>
+<!--Breadcrumb Row-->
+<!--Page Header Row-->
+<div class="row mb-4">
+	<div class="col-12">
+		<div class="PageHeader">@ViewData["Title"]</div>
+	</div>
+</div>
+<!--Page Header Row-->
+<!--Filter Row-->
+<div class="mb-4 filter">
+	<form method="post">
+		<label asp-for="CategoryId"></label>
+		<select asp-for="CategoryId" asp-items="@Model.SelectList"><option value="0">All</option></select>
+		<button asp-page-handler="Filter" class="btn bg-transparent"><i class="fas fa-search fa-2x"></i></button>
+	</form>
+</div>
+<!--Filter Row-->
+<!--Content Row-->
+<div class="row">
+	<div class="col-12">
+		@if (Model.Pies.Count > 0)
+		{
+			<form method="post" class="overflow-auto">
+				<div class="justify-content-end d-flex align-items-center mb-4">
+					<span class="me-2">Total Record(s): @Model.TotalRecords</span><button asp-page-handler="Export" class="btn"><i class="fa-solid fa-file-export"></i></button>
+				</div>
+
+				<table class="table table-bordered table-sm table-hover mb-0 vertical">
+					<thead class="thead-light text-center">
+						<tr class="vertical">
+							<th>Image</th>
+							<th>Pie Name</th>
+							<th>Category Name</th>
+							<th>Description</th>
+							<th>Price</th>
+							<th>Expiry Date</th>
+							<th>In&nbsp;Stock?</th>
+						</tr>
+					</thead>
+					<tbody class="medium">
+						@foreach (var pie in Model.Pies)
+						{
+							string imageURL = System.IO.Path.Combine("../images/", (string.IsNullOrEmpty(pie.ImageUrl) ? "NoImage.jpg" : "pie/" + pie.ImageUrl));
+							<tr>
+								<td class="text-center"><img src="@imageURL" class="imageThumbnail-Small" /></td>
+
+								<td><a asp-page="Display" asp-route-Id="@pie.Id" target="_blank">@pie.Name</a></td>
+
+								<td>@pie.CategoryName</td>
+
+								@if (pie.Description.Length > 50)
+								{
+									<td>@Html.Raw(pie.Description.Substring(0, 50))...</td>
+								}
+								else
+								{
+									<td>@Html.Raw(pie.Description)</td>
+								}
+
+								<td class="text-end">@pie.Price</td>
+								<td class="text-center">@string.Format("{0:dd/MMMM/yyyy}", pie.ExpiryDate).Replace(" ", "\u00A0")</td>
+								<td class="text-center">@pie.InStock</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</form>
+
+			@if (Model.PageNumber > 0 && Model.TotalPages > 1)
+			{
+				int pageSize = Convert.ToInt32(_config["SiteSettings:PageSize"]);
+				<div class="row mt-4">
+					<div class="col-sm-8 overflow-auto">
+						<ul class="pagination mb-0">
+							@for (var i = 1; i <= Model.TotalPages; i++)
+							{
+								<li class="pagination-item @(i == Model.PageNumber ? "active" : "")">
+									<a asp-page="/Pie/List" asp-route-pagenumber="@i" class="pagination-link">@i</a>
+								</li>
+							}
+						</ul>
+					</div>
+					<div class="col-sm-4 align-self-center text-sm-right text-center">
+						Showing @(((Model.PageNumber - 1) * pageSize) + 1) to @((Model.PageNumber * pageSize) > Model.TotalRecords ? Model.TotalRecords : (Model.PageNumber * pageSize)) of @Model.TotalRecords records.
+					</div>
+				</div>
+			}
+		}
+		else
+		{
+			<div>There is no content to show.</div>
+		}
+	</div>
+</div>
+<!--Content Row-->

@@ -1,0 +1,33 @@
+﻿@page "{Id}"
+@model WebApp.Admin.UI.Pages.Pie.DisplayModel
+@{
+	//ViewData["Title"] = "Pie Details";
+}
+
+@section Breadcrumb
+{
+<li class="breadcrumb-item"><a asp-page="/Index" class="breadcrumb-link">Home</a></li>
+<li class="breadcrumb-item"><a asp-page="/Pie/List" asp-route-c="pie" asp-route-p="piel" class="breadcrumb-link">Pie List</a></li>
+<li class="breadcrumb-item active">@ViewData["Title"]</li>
+}
+
+<div class="row mb-4">
+	<div class="col-4">
+		<img src="@Model.ImageURL" class="imageThumbnail-Original" />
+	</div>
+	<div class="col-8">
+		<strong>Pie Name:&nbsp;</strong>@Model.Pie.Name<br>
+		<strong>Category Name:&nbsp;</strong>@Model.Pie.CategoryName<br>
+		<strong>Price:&nbsp;</strong>@Model.Pie.Price<br>
+		<strong>Expiry Date:&nbsp;</strong>@string.Format("{0:dddd, MMMM d, yyyy}", @Model.Pie.ExpiryDate)<br>
+		<strong>In Stock:&nbsp;</strong>@Model.Pie.InStock
+	</div>
+</div>
+<div class="row">
+	<div class="col-12">
+		<strong>Description:</strong><br>
+		<p>
+			@Html.Raw(Model.Pie.Description)
+		</p>
+	</div>
+</div>

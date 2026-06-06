@@ -1,0 +1,67 @@
+﻿@page
+@model UserManagementModel
+@{
+	Layout = "/Pages/Shared/_Layout.cshtml";
+	ViewData["Title"] = "User List";
+}
+
+@section Breadcrumb
+{
+<li class="breadcrumb-item"><a asp-page="/Index">Home</a></li>
+<li class="breadcrumb-item active">@ViewData["Title"]</li>
+}
+
+<div class="justify-content-start d-flex mb-4">
+	<a asp-area="Identity" asp-page="/Account/Register" asp-route-c="usr" asp-route-p="usru" class="btn btn-info">Create New User</a>
+</div>
+
+<form method="post" class="overflow-auto">
+	<table class="table table-bordered table-sm table-hover table-valign-middle mb-0">
+		<thead class="thead-light text-center">
+			<tr>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Phone</th>
+				<th>Confirmed</th>
+				<th>Lock</th>
+				<th>Reset Password</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+		</thead>
+		<tbody class="medium">
+			@foreach (var item in Model.Users)
+			{
+				<tr>
+					<td>@item.FullName</td>
+					<td>@item.Email</td>
+					<td>@item.PhoneNumber</td>
+					<td class="text-center">@item.EmailConfirmed</td>
+
+					<td class="text-center">
+						@if (item.LockoutEnd > DateTime.Now)
+						{
+							<button asp-page-handler="LockUnlock" asp-route-Id="@item.Id" class="btn btn-danger btn-sm"><i class="fas fa-lock-open"></i></button>
+						}
+						else
+						{
+							<button asp-page-handler="LockUnlock" asp-route-Id="@item.Id" class="btn btn-info btn-sm"><i class="fas fa-user-lock"></i></button>
+						}
+					</td>
+
+					<td class="text-center">
+						<a asp-area="Identity" asp-page="/Account/ResetPassword" asp-route-code="@item.Id" class="btn btn-info btn-sm"><i class="fas fa-passport"></i></a>
+					</td>
+
+					<td class="text-center">
+						<a asp-area="Identity" asp-page="/Account/Manage/Index" asp-route-Id="@item.Id" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
+					</td>
+
+					<td class="text-center">
+						<button asp-page-handler="Delete" asp-route-Id="@item.Id" class="btn btn-info btn-sm" onclick="return confirm('Are you sure you want to delete?')"><i class="fas fa-trash-alt"></i></button>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</form>

@@ -1,0 +1,62 @@
+@page
+@model WebApp.Admin.UI.Pages.Settings.EmailTemplate.ListModel
+@inject IConfiguration _config
+
+@{
+	ViewData["Title"] = "Email Template";
+}
+
+@section Breadcrumb
+{
+<li class="breadcrumb-item"><a asp-page="/Index" class="breadcrumb-link">Home</a></li>
+<li class="breadcrumb-item">Settings</li>
+<li class="breadcrumb-item active">@ViewData["Title"]</li>
+}
+
+<form method="post" class="overflow-auto">
+	<table class="table table-bordered table-sm table-hover table-valign-middle mb-0">
+		<thead class="thead-light text-center">
+			<tr>
+				<th>Name</th>
+				<th>Variables</th>
+				<th>Subject</th>
+				<th>Template</th>
+				<th>Edit</th>
+			</tr>
+		</thead>
+		<tbody class="medium">
+			@foreach (var item in Model.EmailTemplates)
+			{
+				<tr>
+					<td>@item.Name</td>
+					<td>@item.Variables</td>
+					<td>@item.Subject</td>
+					<td>@Html.Raw(item.Template)</td>
+					<td class="text-center">
+						<a asp-page="/Settings/EmailTemplate/Upsert" asp-route-Id="@item.Id" asp-route-c="set" asp-route-p="et" class="btn btn-success"><i class="fas fa-edit"></i></a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</form>
+
+@if (Model.PageNumber > 0 && Model.TotalPages > 1)
+{
+	int pageSize = Convert.ToInt32(_config["SiteSettings:PageSize"]);
+	<div class="row mt-4">
+		<div class="col-sm-8">
+			<ul class="pagination mb-0">
+				@for (var i = 1; i <= Model.TotalPages; i++)
+				{
+					<li class="pagination-item @(i == Model.PageNumber ? "active" : "")">
+						<a asp-page="/Settings/EmailTemplate/List" asp-route-pagenumber="@i" asp-route-c="set" asp-route-p="et" class="pagination-link">@i</a>
+					</li>
+				}
+			</ul>
+		</div>
+		<div class="col-sm-4 align-self-center text-sm-right text-center">
+			Showing @(((Model.PageNumber - 1) * pageSize) + 1) to @((Model.PageNumber * pageSize) > Model.TotalRecords ? Model.TotalRecords : (Model.PageNumber * pageSize)) of @Model.TotalRecords records.
+		</div>
+	</div>
+}

@@ -1,0 +1,48 @@
+@page
+@model WebApp.Admin.UI.Pages.Category.UpsertModel
+@{
+	ViewData["Title"] = "Category Administration";
+}
+
+@section Scripts
+{
+<partial name="_ValidationScriptsPartial" />
+}
+
+@section Breadcrumb
+{
+<li class="breadcrumb-item"><a asp-page="/Index" class="breadcrumb-link">Home</a></li>
+<li class="breadcrumb-item"><a asp-page="/Category/List" class="breadcrumb-link" asp-route-c="cat" asp-route-p="catl">Category List</a></li>
+<li class="breadcrumb-item active">@ViewData["Title"]</li>
+}
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+	<div class="alert alert-warning alert-dismissible fade show" role="alert">
+		@Html.Raw(Model.ErrorMessage)
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+}
+
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+	<div class="alert alert-success alert-dismissible fade show" role="alert">
+		@Html.Raw(Model.SuccessMessage)
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+}
+
+<form method="post">
+	<input asp-for="Category.Id" type="hidden" />
+
+	<div class="form-group mb-3">
+		<label asp-for="Category.Name" class="control-label"></label>
+		<input asp-for="Category.Name" class="form-control" />
+		<span asp-validation-for="Category.Name" class="small text-danger"></span>
+	</div>
+
+	<div class="form-group">
+		<input type="submit" value="@(Model.Category.Id == 0 ? "Create Category" : "Update Category")" class="btn btn-success me-2" />
+		<a asp-page="/Category/List" asp-route-c="cat" asp-route-p="catl" class="btn btn-success">Back to List</a>
+	</div>
+</form>

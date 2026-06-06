@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PublishTargetUrl>E:\Repositories\CC\WebAppStarter\Publish\Admin</_PublishTargetUrl>
+    <History>True|2023-07-03T08:23:33.3833381Z;True|2023-07-03T14:11:27.8758842+06:00;True|2022-12-28T21:18:04.5095270+06:00;True|2022-09-07T21:16:17.4834044+06:00;True|2022-04-28T14:43:40.9710156+06:00;True|2022-04-28T14:42:49.9706487+06:00;True|2022-04-28T14:41:38.1935596+06:00;True|2022-04-10T14:43:09.1169961+06:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

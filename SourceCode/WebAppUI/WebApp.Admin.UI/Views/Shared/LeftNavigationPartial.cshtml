@@ -1,0 +1,75 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+	string categoryQuery = Context.Request.Query["c"].ToString() ?? "";
+	string pageQuery = Context.Request.Query["p"].ToString() ?? "";
+
+	string OpenCategoryQ(string category)
+	{
+		return (categoryQuery.ToLower() == category.ToLower()) ? "menu-open" : "";
+	}
+
+	string ActiveCategoryQ(string category)
+	{
+		return (categoryQuery.ToLower() == category.ToLower()) ? "active" : "";
+	}
+
+	string ActivePageQ(string page)
+	{
+		return (pageQuery.ToLower() == page.ToLower()) ? "active" : "";
+	}
+}
+
+<!-- Brand Logo -->
+<partial name="BrandLogoPartial" />
+<!-- Brand Logo -->
+
+<!-- Sidebar -->
+<div class="sidebar">
+	<nav class="mt-2">
+		<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+			@if (User.IsInRole("SystemAdmin"))
+			{
+				<li class="nav-item has-treeview @OpenCategoryQ("cat")">
+					<a href="#" class="nav-link @ActiveCategoryQ("cat")"><i class="fa-solid fa-object-ungroup fa-sm me-2"></i><p>Category<i class="right fas fa-angle-left"></i></p></a>
+					<ul class="nav nav-treeview medium">
+						<li class="nav-item"><a asp-page="/Category/List" asp-route-c="cat" asp-route-p="catl" class="nav-link @ActivePageQ("catl")"><i class="fas fa-caret-right me-2"></i><p>Category Administration</p></a></li>
+						<li class="nav-item"><a asp-page="/Category/Upsert" asp-route-c="cat" asp-route-p="catu" class="nav-link @ActivePageQ("catu")"><i class="fas fa-caret-right me-2"></i><p>Create/Update Category</p></a></li>
+					</ul>
+				</li>
+
+				<li class="nav-item has-treeview @OpenCategoryQ("pie")">
+					<a href="#" class="nav-link @ActiveCategoryQ("pie")"><i class="fa-solid fa-martini-glass-empty fa-sm me-2"></i><p>Pie<i class="right fas fa-angle-left"></i></p></a>
+					<ul class="nav nav-treeview medium">
+						<li class="nav-item"><a asp-page="/Pie/List" asp-route-c="pie" asp-route-p="piel" class="nav-link @ActivePageQ("piel")"><i class="fas fa-caret-right me-2"></i><p>Pie Administration</p></a></li>
+						<li class="nav-item"><a asp-page="/Pie/Upsert" asp-route-c="pie" asp-route-p="pieu" class="nav-link @ActivePageQ("pieu")"><i class="fas fa-caret-right me-2"></i><p>Create/Update Pie</p></a></li>
+					</ul>
+				</li>
+
+				<li class="nav-item has-treeview @OpenCategoryQ("usr")">
+					<a href="#" class="nav-link @ActiveCategoryQ("usr")"><i class="fa-regular fa-user fa-sm me-2"></i><p>User Management<i class="right fas fa-angle-left"></i></p></a>
+					<ul class="nav nav-treeview medium">
+						<li class="nav-item"><a asp-area="Identity" asp-page="/Account/Manage/UserManagement" asp-route-c="usr" asp-route-p="usrl" class="nav-link @ActivePageQ("usrl")"><i class="fas fa-caret-right me-2"></i><p>User Administration</p></a></li>
+						<li class="nav-item"><a asp-area="Identity" asp-page="/Account/Register" asp-route-c="usr" asp-route-p="usru" class="nav-link @ActivePageQ("usru")"><i class="fas fa-caret-right me-2"></i><p>Create/Update User</p></a></li>
+					</ul>
+				</li>
+
+				<li class="nav-item has-treeview @OpenCategoryQ("set")">
+					<a href="#" class="nav-link @ActiveCategoryQ("set")"><i class="fa-solid fa-gears fa-sm me-2"></i><p>Settings<i class="right fas fa-angle-left"></i></p></a>
+					<ul class="nav nav-treeview medium">
+						<li class="nav-item"><a asp-page="/Settings/EmailTemplate/List" asp-route-c="set" asp-route-p="et" class="nav-link @ActivePageQ("et")"><i class="fas fa-caret-right me-2"></i><p>Email Template</p></a></li>
+					</ul>
+				</li>
+
+				<li class="nav-item has-treeview @OpenCategoryQ("rpt")">
+					<a href="#" class="nav-link @ActiveCategoryQ("rpt")"><i class="fa-solid fa-list fa-sm me-2"></i><p>System Reports<i class="right fas fa-angle-left"></i></p></a>
+					<ul class="nav nav-treeview medium">
+						<li class="nav-item"><a asp-page="/Report/AuditLog" asp-route-c="rpt" asp-route-p="adtl" class="nav-link @ActivePageQ("adtl")"><i class="fas fa-caret-right me-2"></i><p>Audit Log</p></a></li>
+						<li class="nav-item"><a asp-page="/Report/ApplicationLog" asp-route-c="rpt" asp-route-p="appl" class="nav-link @ActivePageQ("appl")"><i class="fas fa-caret-right me-2"></i><p>Application/Exception Log</p></a></li>
+					</ul>
+				</li>
+			}
+		</ul>
+	</nav>
+</div>
+<!-- Sidebar -->

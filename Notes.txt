@@ -1,0 +1,9 @@
+Quick Start Guide:
+The solution has three separate execuable projects; 
+WebApp.API.Endpoint,
+WebApp.User.UI and
+WebApp.Admin.UI. Make sure to run API project first, then the UI projects. Also make sure to change the settings in appsettings.json files according to your Hash settings, JWT settings, ConnectionStrings, Site settings, Email settings, SMS settings, BaseAPIAddress, UserRootURL, UserRootPath etc.
+	
+User Credential:
+User ID: test@yahoo.com
+Password: 123456

@@ -1,0 +1,14 @@
+@page
+@model WebApp.Admin.UI.Pages.NotFoundModel
+@{
+	ViewData["Title"] = "Not Found";
+}
+
+@section Breadcrumb
+{
+<li class="breadcrumb-item"><a asp-page="/Index" class="breadcrumb-link">Home</a></li>
+<li class="breadcrumb-item active">@ViewData["Title"]</li>
+}
+
+<div class="ContentSection">The requested resource was not found.</div>
+<a href="javascript:history.go(-1)" class="btn btn-success">Return to Previous Page</a>

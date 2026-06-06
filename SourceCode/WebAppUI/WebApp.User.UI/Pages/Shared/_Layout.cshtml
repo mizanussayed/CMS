@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - Pie Shop User Panel</title>
+	<link rel="shortcut icon" href="~/favicon.ico">
+	<link rel="stylesheet" href="~/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/fontawesome.min.css">
+	<link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+	<header>
+		<div class="container-fluid py-2 masthead">
+			<div class="container">
+				<partial name="HeaderPartial" />
+			</div>
+		</div>
+	</header>
+
+	<nav class="navbar navbar-expand-lg sticky-top py-1 menu">
+		<div class="container">
+			<partial name="TopNavigationPartial" />
+		</div>
+	</nav>
+
+	<div class="container my-4">
+		@RenderBody()
+	</div>
+
+	<footer class="footer">
+		<div class="container py-3">
+			<partial name="FooterPartial" />
+		</div>
+	</footer>
+
+	<script src="~/js/jquery.min.js"></script>
+	<script src="~/js/bootstrap.bundle.min.js"></script>
+	@await RenderSectionAsync("Scripts", required: false)
+	<script src="~/js/site.js"></script>
+</body>
+</html>

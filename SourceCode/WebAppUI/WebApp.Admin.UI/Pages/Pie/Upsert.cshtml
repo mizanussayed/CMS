@@ -1,0 +1,141 @@
+@page
+@model WebApp.Admin.UI.Pages.Pie.UpsertModel
+@{
+	ViewData["Title"] = "Pie Administration";
+}
+
+@section Styles
+{
+<link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker-standalone.css" rel="stylesheet" />
+<link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/plugins/summernote/summernote-bs4.min.css" />
+}
+
+@section Scripts
+{
+<script src="~/plugins/moment.js/moment.min.js"></script>
+<script src="~/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script src="~/plugins/summernote/summernote-bs4.min.js"></script>
+
+<script>
+	$(document).ready(function () {
+		$('.NoteArea').summernote(
+			{
+				height: 150
+			}
+		);
+
+		var month = @Model.Pie.ExpiryDate.Month;
+		var day = @Model.Pie.ExpiryDate.Day;
+		var year = @Model.Pie.ExpiryDate.Year;
+		var hour = @Model.Pie.ExpiryDate.Hour;
+		var minute = @Model.Pie.ExpiryDate.Minute;
+		var d = new Date(year, Number(month)-1, day, hour, minute);
+		$('#ExpiryDate').datetimepicker({
+			format: 'DD-MMM-YYYY',
+			sideBySide: true,
+			date: d
+		});
+
+		$('.custom-file-input').on("change", function () {
+			var fileName = $(this).val().split("\\").pop();
+			$(this).next('.custom-file-label').html(fileName);
+		});
+	});
+</script>
+
+<partial name="_ValidationScriptsPartial" />
+}
+
+@section Breadcrumb
+{
+<li class="breadcrumb-item"><a asp-page="/Index" class="breadcrumb-link">Home</a></li>
+<li class="breadcrumb-item"><a asp-page="/Pie/List" asp-route-c="pie" asp-route-p="piel" class="breadcrumb-link">Pie List</a></li>
+<li class="breadcrumb-item active">@ViewData["Title"]</li>
+}
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+	<div class="alert alert-warning alert-dismissible fade show" role="alert">
+		@Html.Raw(Model.ErrorMessage)
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+}
+
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+	<div class="alert alert-success alert-dismissible fade show" role="alert">
+		@Html.Raw(Model.SuccessMessage)
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+}
+
+<form method="post" enctype="multipart/form-data">
+	<input asp-for="Pie.Id" type="hidden" />
+	<input asp-for="Pie.ImageUrl" type="hidden" />
+
+	<div class="row">
+		<div class="col-6">
+			<div class="form-group mb-3">
+				<label asp-for="Pie.Name" class="control-label"></label>
+				<input asp-for="Pie.Name" class="form-control" />
+				<span asp-validation-for="Pie.Name" class="small text-danger"></span>
+			</div>
+
+			<div class="form-group mb-3">
+				<label asp-for="Pie.CategoryId" class="control-label"></label>
+				<select asp-for="Pie.CategoryId" asp-items="@Model.CategorySelectList" class="form-control">
+					<option value="0">Select Category</option>
+				</select>
+				<span asp-validation-for="Pie.CategoryId" class="small text-danger"></span>
+			</div>
+
+			<div class="form-group mb-3">
+				<label asp-for="Pie.Price" class="control-label"></label>
+				<input asp-for="Pie.Price" class="form-control" />
+				<span asp-validation-for="Pie.Price" class="small text-danger"></span>
+			</div>
+
+			<div class="form-group mb-3">
+				<label asp-for="ExpiryDate" class="control-label"></label>
+				<input asp-for="ExpiryDate" class="form-control" />
+				<span asp-validation-for="ExpiryDate" class="small text-danger"></span>
+			</div>
+
+			<div class="form-group mb-3">
+				<label asp-for="Pie.InStock" class="control-label"></label>
+				<input asp-for="Pie.InStock" class="form-check" />
+			</div>
+		</div>
+
+		<div class="col-6">
+			<div class="form-group mb-3">
+				<label asp-for="Pie.Description" class="control-label"></label>
+				<textarea asp-for="Pie.Description" class="form-control NoteArea"></textarea>
+				<span asp-validation-for="Pie.Description" class="small text-danger"></span>
+			</div>
+
+			<div class="form-group mb-3">
+				<label asp-for="PieImage" class="control-label"></label>
+
+				@if (!string.IsNullOrEmpty(Model.Pie.Name))
+				{
+					<div class="mb-1"><a href="@Model.ImageURL" target="_blank">Current image of @Model.Pie.Name</a></div>
+				}
+
+				<div class="custom-file">
+					<input asp-for="PieImage" class="form-control custom-file-input" data-val-required="false" />
+					<label class="custom-file-label">Click here to select picture</label>
+					<div class="small">(Recommended Type: jpg/png, Size: 100 KB, Dimension: 320 X 200)</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-12">
+			<input type="submit" value="@(Model.Pie.Id == 0 ? "Create Pie" : "Update Pie")" class="btn btn-success me-2" />
+			<a asp-page="/Pie/List" asp-route-c="pie" asp-route-p="piel" class="btn btn-success">Back to List</a>
+		</div>
+	</div>
+</form>

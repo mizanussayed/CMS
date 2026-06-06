@@ -1,0 +1,43 @@
+﻿@page
+@model IndexModel
+@{
+	Layout = "/Pages/Shared/_Layout.cshtml";
+	ViewData["Title"] = "Update Profile";
+}
+
+@section Breadcrumb
+{
+    <li class="breadcrumb-item"><a asp-page="/Index">Home</a></li>
+    <li class="breadcrumb-item"><a asp-area="Identity" asp-page="/Account/Manage/UserManagement" asp-route-c="usr" asp-route-p="usrl">User List</a></li>
+    <li class="breadcrumb-item active">@ViewData["Title"]</li>
+}
+
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="col-6 mx-auto">
+	<form id="profile-form" method="post">
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<input asp-for="Input.UserId" type="hidden" />
+		<div class="form-group">
+			<label asp-for="Input.Email"></label>
+			<input asp-for="Input.Email" class="form-control" readonly />
+		</div>
+		<div class="form-group">
+			<label asp-for="Input.FullName"></label>
+			<input asp-for="Input.FullName" class="form-control" />
+			<span asp-validation-for="Input.FullName" class="text-danger"></span>
+		</div>
+		<div class="form-group">
+			<label asp-for="Input.PhoneNumber"></label>
+			<input asp-for="Input.PhoneNumber" class="form-control" />
+			<span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+		</div>
+		<div class="form-group">
+			<button id="update-profile-button" type="submit" class="btn btn-info me-2">Save</button>
+			<a asp-area="Identity" asp-page="/Account/Manage/UserManagement" asp-route-c="usr" asp-route-p="usrl" class="btn btn-info">Back to List</a>
+		</div>
+	</form>
+</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}
