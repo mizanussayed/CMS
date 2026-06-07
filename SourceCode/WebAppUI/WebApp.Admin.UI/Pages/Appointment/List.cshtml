@@ -1,0 +1,31 @@
+@page
+@model WebApp.Admin.UI.Pages.Appointment.ListModel
+
+<h2>Appointments</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Doctor</th>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Appointments != null)
+        {
+            foreach (var a in Model.Appointments)
+            {
+                <tr>
+                    <td>@a.Id</td>
+                    <td>@a.UserId</td>
+                    <td>@a.DoctorId</td>
+                    <td>@a.AppointmentDate</td>
+                    <td>@a.Status</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

@@ -14,5 +14,6 @@ public static class RegisterServices
         builder.Services.AddSingleton<SecurityHelper>();
         builder.Services.AddScoped<CategoryService>();
         builder.Services.AddScoped<PieService>();
+        builder.Services.AddScoped<AppointmentService>();
     }
 }

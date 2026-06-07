@@ -52,6 +52,8 @@ public static class RegisterServices
         builder.Services.AddScoped<AuthService>();
         builder.Services.AddScoped<CategoryService>();
         builder.Services.AddScoped<PieService>();
+        builder.Services.AddScoped<DoctorService>();
+        builder.Services.AddScoped<AppointmentService>();
         builder.Services.AddScoped<EmailTemplateService>();
     }
 }

@@ -167,6 +167,8 @@ public class Startup
 		services.AddScoped<IEmailTemplateRepository, EmailTemplateRepository>();
 		services.AddScoped<ICategoryRepository, CategoryRepository>();
 		services.AddScoped<IPieRepository, PieRepository>();
+		services.AddScoped<IDoctorRepository, DoctorRepository>();
+		services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 		services.AddScoped<IMobileAuthRepository, MobileAuthRepository>();
 		services.AddScoped<IAuthRepository, AuthRepository>();
 	}

@@ -1,0 +1,16 @@
+@page
+@model WebApp.User.UI.Pages.Appointment.BookModel
+
+<h2>Book Appointment</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label>DoctorId</label>
+        <input asp-for="Appointment.DoctorId" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Appointment Date</label>
+        <input asp-for="Appointment.AppointmentDate" type="datetime-local" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Book</button>
+</form>
