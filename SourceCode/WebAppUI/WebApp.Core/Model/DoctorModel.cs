@@ -5,6 +5,7 @@ namespace WebApp.Core.Model;
 public class DoctorModel : AuditModel
 {
     public int Id { get; set; }
+    public int DoctorID { get => Id; set => Id = value; }
 
     [Required(ErrorMessage = "Please enter 'Name'.")]
     [MinLength(3, ErrorMessage = "Minimum length of 'Name' is 3 characters.")]

@@ -5,6 +5,7 @@ using WebApp.Core.Model;
 using Shouldly;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Xunit;
@@ -37,7 +38,7 @@ public class BookAppointment_Should : IClassFixture<CustomWebApplicationFactory>
         if (_httpClient.DefaultRequestHeaders.Contains("x-hash")) _httpClient.DefaultRequestHeaders.Remove("x-hash");
         _httpClient.DefaultRequestHeaders.Add("x-hash", _securityHelper.GenerateHash());
 
-        var response = await _httpClient.PostAsJsonAsync($"v1/appointment/book", postData);
+        var response = await _httpClient.PostAsJsonAsync($"v2/appointment/book", postData);
 
         response.StatusCode.ShouldBe(HttpStatusCode.Created);
     }

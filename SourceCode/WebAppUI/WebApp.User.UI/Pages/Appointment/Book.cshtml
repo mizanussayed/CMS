@@ -1,16 +1,101 @@
 @page
 @model WebApp.User.UI.Pages.Appointment.BookModel
+@{
+    ViewData["Title"] = "Book Appointment";
+}
 
-<h2>Book Appointment</h2>
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-primary text-white py-3">
+                <h4 class="mb-0"><i class="fas fa-calendar-plus me-2"></i>Book an Appointment</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="post" id="bookAppointmentForm">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
-<form method="post">
-    <div class="form-group">
-        <label>DoctorId</label>
-        <input asp-for="Appointment.DoctorId" class="form-control" />
+                    <!-- Doctor Selection -->
+                    <div class="mb-4">
+                        <label asp-for="Appointment.DoctorId" class="form-label fw-semibold">
+                            <i class="fas fa-user-md me-1 text-primary"></i>Select Doctor
+                        </label>
+                        <select asp-for="Appointment.DoctorId" class="form-select form-select-lg" id="doctorSelect">
+                            <option value="">-- Choose a Doctor --</option>
+                            @foreach (var d in Model.Doctors)
+                            {
+                                <option value="@d.DoctorID"
+                                        data-specialization="@d.Specialization"
+                                        data-slots="@d.AvailableSlots"
+                                        selected="@(Model.Appointment.DoctorId == d.DoctorID ? "selected" : null)">
+                                    @d.Name @(!string.IsNullOrEmpty(d.Specialization) ? $"— {d.Specialization}" : "")
+                                </option>
+                            }
+                        </select>
+                        <span asp-validation-for="Appointment.DoctorId" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Doctor Info Panel (shown dynamically) -->
+                    <div id="doctorInfoPanel" class="alert alert-info d-none mb-4">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-stethoscope fa-lg me-3 text-info"></i>
+                            <div>
+                                <div class="fw-semibold" id="infoSpecialization"></div>
+                                <div class="small mt-1">
+                                    <i class="fas fa-clock me-1"></i><strong>Available slots:</strong>
+                                    <span id="infoSlots"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Date & Time -->
+                    <div class="mb-4">
+                        <label asp-for="Appointment.AppointmentDate" class="form-label fw-semibold">
+                            <i class="fas fa-calendar-alt me-1 text-primary"></i>Appointment Date &amp; Time
+                        </label>
+                        <input asp-for="Appointment.AppointmentDate" type="datetime-local" class="form-control form-control-lg" id="appointmentDate"
+                               min="@DateTime.Now.AddHours(1).ToString("yyyy-MM-ddTHH:mm")" />
+                        <span asp-validation-for="Appointment.AppointmentDate" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
+                        <a asp-page="/Doctor/List" class="btn btn-outline-secondary btn-lg" id="cancelBookBtn">
+                            <i class="fas fa-arrow-left me-1"></i> Back to Doctors
+                        </a>
+                        <button type="submit" class="btn btn-primary btn-lg" id="submitBookBtn">
+                            <i class="fas fa-check-circle me-1"></i> Confirm Booking
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label>Appointment Date</label>
-        <input asp-for="Appointment.AppointmentDate" type="datetime-local" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary">Book</button>
-</form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            var select = document.getElementById('doctorSelect');
+            var panel = document.getElementById('doctorInfoPanel');
+            var infoSpec = document.getElementById('infoSpecialization');
+            var infoSlots = document.getElementById('infoSlots');
+
+            function updatePanel() {
+                var opt = select.options[select.selectedIndex];
+                var spec = opt.dataset.specialization;
+                var slots = opt.dataset.slots;
+                if (opt.value && (spec || slots)) {
+                    infoSpec.textContent = spec ? 'Specialization: ' + spec : '';
+                    infoSlots.textContent = slots || 'Contact clinic for details';
+                    panel.classList.remove('d-none');
+                } else {
+                    panel.classList.add('d-none');
+                }
+            }
+
+            select.addEventListener('change', updatePanel);
+            updatePanel(); // run on load if pre-selected
+        })();
+    </script>
+}

@@ -4,7 +4,7 @@ namespace WebApp.Core.Model;
 
 public class AppointmentModel : AuditModel
 {
-    public int Id { get; set; }
+    public int AppointmentID { get; set;}
 
     [Required(ErrorMessage = "Please provide UserId.")]
     public int UserId { get; set; }

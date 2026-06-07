@@ -1,0 +1,112 @@
+@page
+@model WebApp.User.UI.Pages.Doctor.ListModel
+@{
+    ViewData["Title"] = "Find a Doctor";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0"><i class="fas fa-stethoscope me-2 text-primary"></i>Find a Doctor</h2>
+    <a asp-page="/Appointment/Book" class="btn btn-primary">
+        <i class="fas fa-calendar-plus me-1"></i> Book Appointment
+    </a>
+</div>
+
+<!-- Filter bar -->
+<form method="get" class="row g-2 mb-4 align-items-end">
+    <div class="col-md-5">
+        <label class="form-label fw-semibold">Filter by Specialization</label>
+        <select name="SpecializationFilter" class="form-select" id="specializationFilter">
+            <option value="">-- All Specializations --</option>
+            @foreach (var s in Model.Specializations)
+            {
+                <option value="@s" selected="@(Model.SpecializationFilter == s ? "selected" : null)">@s</option>
+            }
+        </select>
+    </div>
+    <input type="hidden" name="PageNumber" value="1" />
+    <div class="col-auto">
+        <button type="submit" class="btn btn-outline-primary" id="filterBtn">
+            <i class="fas fa-filter me-1"></i> Apply Filter
+        </button>
+        <a asp-page="/Doctor/List" class="btn btn-outline-secondary ms-1">Clear</a>
+    </div>
+</form>
+
+<!-- Doctors grid -->
+@if (Model.Doctors.Count == 0)
+{
+    <div class="alert alert-info"><i class="fas fa-info-circle me-2"></i>No doctors found matching your criteria.</div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+        @foreach (var d in Model.Doctors)
+        {
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm" id="doctor-card-@d.DoctorID">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary bg-opacity-10 rounded-circle p-3 me-3">
+                                <i class="fas fa-user-md text-primary fa-lg"></i>
+                            </div>
+                            <div>
+                                <h5 class="card-title mb-0 fw-bold">@d.Name</h5>
+                                <span class="badge bg-primary bg-opacity-75 mt-1">@(d.Specialization ?? "General")</span>
+                            </div>
+                        </div>
+                        @if (!string.IsNullOrWhiteSpace(d.AvailableSlots))
+                        {
+                            <p class="mb-2 text-muted small"><i class="fas fa-clock me-1"></i><strong>Available Hours:</strong></p>
+                            <div>
+                                @foreach (var slot in d.AvailableSlots.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                                {
+                                    <span class="badge bg-success bg-opacity-75 me-1 mb-1">@slot.Trim()</span>
+                                }
+                            </div>
+                        }
+                    </div>
+                    <div class="card-footer bg-transparent border-0">
+                        <a asp-page="/Appointment/Book" asp-route-doctorId="@d.DoctorID"
+                           class="btn btn-primary w-100" id="book-btn-@d.DoctorID">
+                            <i class="fas fa-calendar-check me-1"></i> Book Appointment
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Pagination -->
+    @if (Model.TotalPages > 1)
+    {
+        <nav aria-label="Doctor list pagination">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
+                    <a class="page-link" asp-page="/Doctor/List"
+                       asp-route-PageNumber="@(Model.PageNumber - 1)"
+                       asp-route-SpecializationFilter="@Model.SpecializationFilter"
+                       id="prev-page-link">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </a>
+                </li>
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                        <a class="page-link" asp-page="/Doctor/List"
+                           asp-route-PageNumber="@i"
+                           asp-route-SpecializationFilter="@Model.SpecializationFilter"
+                           id="page-link-@i">@i</a>
+                    </li>
+                }
+                <li class="page-item @(!Model.HasNextPage ? "disabled" : "")">
+                    <a class="page-link" asp-page="/Doctor/List"
+                       asp-route-PageNumber="@(Model.PageNumber + 1)"
+                       asp-route-SpecializationFilter="@Model.SpecializationFilter"
+                       id="next-page-link">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+}

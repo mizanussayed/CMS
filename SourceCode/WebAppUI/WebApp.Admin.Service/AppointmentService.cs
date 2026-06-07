@@ -21,9 +21,9 @@ public class AppointmentService : BaseService
         this._httpClient = ConfigureClient().GetAwaiter().GetResult();
     }
 
-    public async Task<List<AppointmentModel>> GetAllAppointments()
+    public async Task<List<AppointmentModel>> GetAllAppointments(int pageNumber)
     {
-        _httpClient.DefaultRequestHeaders.Add("x-hash", _securityHelper.GenerateHash());
+        _httpClient.DefaultRequestHeaders.Add("x-hash", _securityHelper.GenerateHash(pageNumber.ToString()));
 
         var response = await Policy
                 .Handle<HttpRequestException>(ex =>
@@ -32,7 +32,7 @@ public class AppointmentService : BaseService
                     return true;
                 })
                 .WaitAndRetryAsync(1, retryAttempt => TimeSpan.FromSeconds(2))
-                .ExecuteAsync(async () => await _httpClient.GetAsync($"v1/appointment/GetAll"));
+                .ExecuteAsync(async () => await _httpClient.GetAsync($"v2/appointment?pageNumber={pageNumber}"));
 
         switch (response.StatusCode)
         {
@@ -54,7 +54,7 @@ public class AppointmentService : BaseService
                     return true;
                 })
                 .WaitAndRetryAsync(1, retryAttempt => TimeSpan.FromSeconds(2))
-                .ExecuteAsync(async () => await _httpClient.PutAsJsonAsync($"v1/appointment/UpdateStatus/{appointmentId}", new { Status = newStatus, Log = logModel }));
+                .ExecuteAsync(async () => await _httpClient.PutAsJsonAsync($"v2/appointment/UpdateStatus/{appointmentId}", new { Status = newStatus, Log = logModel }));
 
         switch (response.StatusCode)
         {

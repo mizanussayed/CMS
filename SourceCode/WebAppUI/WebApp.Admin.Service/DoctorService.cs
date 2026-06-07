@@ -32,7 +32,7 @@ public class DoctorService : BaseService
                     return true;
                 })
                 .WaitAndRetryAsync(1, retryAttempt => TimeSpan.FromSeconds(2))
-                .ExecuteAsync(async () => await _httpClient.GetAsync($"v1/doctor?pagenumber={pageNumber}"));
+                .ExecuteAsync(async () => await _httpClient.GetAsync($"v2/doctor?pagenumber={pageNumber}"));
 
         switch (response.StatusCode)
         {
@@ -54,7 +54,7 @@ public class DoctorService : BaseService
                     return true;
                 })
                 .WaitAndRetryAsync(1, retryAttempt => TimeSpan.FromSeconds(2))
-                .ExecuteAsync(async () => await _httpClient.GetAsync($"v1/doctor/{doctorId}"));
+                .ExecuteAsync(async () => await _httpClient.GetAsync($"v2/doctor/{doctorId}"));
 
         switch (response.StatusCode)
         {
@@ -81,7 +81,7 @@ public class DoctorService : BaseService
                     return true;
                 })
                 .WaitAndRetryAsync(1, retryAttempt => TimeSpan.FromSeconds(2))
-                .ExecuteAsync(async () => await _httpClient.PostAsJsonAsync($"v1/doctor", PostData));
+                .ExecuteAsync(async () => await _httpClient.PostAsJsonAsync($"v2/doctor", PostData));
 
         switch (response.StatusCode)
         {
@@ -108,7 +108,27 @@ public class DoctorService : BaseService
                     return true;
                 })
                 .WaitAndRetryAsync(1, retryAttempt => TimeSpan.FromSeconds(2))
-                .ExecuteAsync(async () => await _httpClient.PutAsJsonAsync($"v1/doctor/Update/{doctorId}", PostData));
+                .ExecuteAsync(async () => await _httpClient.PutAsJsonAsync($"v2/doctor/{doctorId}", PostData));
+
+        if (response.StatusCode != HttpStatusCode.NoContent)
+            throw new Exception(await response.Content.ReadAsStringAsync());
+    }
+
+    public async Task DeleteDoctor(int doctorId, LogModel logModel)
+    {
+        _httpClient.DefaultRequestHeaders.Add("x-hash", _securityHelper.GenerateHash(doctorId.ToString()));
+
+        var request = new HttpRequestMessage(HttpMethod.Delete, $"v2/doctor/{doctorId}");
+        request.Content = JsonContent.Create(logModel);
+
+        var response = await Policy
+                .Handle<HttpRequestException>(ex =>
+                {
+                    _ = Task.Run(() => { _logger.LogError(ex, ex.Message); });
+                    return true;
+                })
+                .WaitAndRetryAsync(1, retryAttempt => TimeSpan.FromSeconds(2))
+                .ExecuteAsync(async () => await _httpClient.SendAsync(request));
 
         if (response.StatusCode != HttpStatusCode.NoContent)
             throw new Exception(await response.Content.ReadAsStringAsync());

@@ -53,7 +53,7 @@ public partial class AppointmentController : ControllerBase
 		return Ok(result);
 	});
 
-	[HttpGet("{userId:int}"), Authorize]
+	[HttpGet("{userId:int}"), AllowAnonymous]
 	public Task<IActionResult> GetAppointmentsByUser(int userId) =>
 	TryCatch(async () =>
 	{
@@ -70,8 +70,8 @@ public partial class AppointmentController : ControllerBase
 	});
 
 
-	[HttpPost("book")]
-	[Authorize]
+	[HttpPost("book"), AllowAnonymous]
+	//[Authorize]
 	public Task<IActionResult> BookAppointment([FromBody] Dictionary<string, object> PostData) =>
 	TryCatch(async () =>
 	{

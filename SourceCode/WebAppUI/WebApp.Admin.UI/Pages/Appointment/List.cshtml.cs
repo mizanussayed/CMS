@@ -23,7 +23,7 @@ public partial class ListModel : PageModel
     public Task<IActionResult> OnGet() =>
     TryCatch(async () =>
     {
-        Appointments = await _appointmentService.GetAllAppointments();
+        Appointments = await _appointmentService.GetAllAppointments(1);
         return Page();
     });
 

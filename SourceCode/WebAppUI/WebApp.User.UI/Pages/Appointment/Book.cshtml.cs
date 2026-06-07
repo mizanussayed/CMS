@@ -8,40 +8,67 @@ namespace WebApp.User.UI.Pages.Appointment;
 
 public partial class BookModel : PageModel
 {
-	[BindProperty]
-	public AppointmentModel Appointment { get; set; }
+    [BindProperty]
+    public AppointmentModel Appointment { get; set; } = new();
 
-	private readonly ILogger<BookModel> _logger;
-	private readonly AppointmentService _appointmentService;
+    [BindProperty(SupportsGet = true)]
+    public int? DoctorId { get; set; }
 
-	public BookModel(ILogger<BookModel> logger, AppointmentService appointmentService)
-	{
-		this._logger = logger;
-		this._appointmentService = appointmentService;
-	}
+    public List<DoctorModel> Doctors { get; set; } = new();
+    public DoctorModel? SelectedDoctor { get; set; }
 
+    private readonly ILogger<BookModel> _logger;
+    private readonly AppointmentService _appointmentService;
+    private readonly EmailService _emailService;
 
-	public Task<IActionResult> OnGet() =>
-	TryCatch(async () =>
-	{
-		// For now, assume user id 1 (seeded patient). Later wire to auth context.
-		return Page();
-	});
+    public BookModel(ILogger<BookModel> logger, AppointmentService appointmentService, EmailService emailService)
+    {
+        this._logger = logger;
+        this._appointmentService = appointmentService;
+        this._emailService = emailService;
+    }
 
-	public Task<IActionResult> OnPost() =>
-	TryCatch(async () =>
-	{
-		LogModel log = new LogModel { UserName = "patient1@example.com", IP = Utility.GetIPAddress(Request) };
-		// In a real app, UserId is derived from identity; using 1 (seeded) for now
-		Appointment.UserId = 1;
-		int id = await _appointmentService.BookAppointment(Appointment, log);
-		return RedirectToPage("/Appointment/List");
-	});
+    public Task<IActionResult> OnGet() =>
+    TryCatch(async () =>
+    {
+        Doctors = await _appointmentService.GetDoctors(1);
+        if (DoctorId.HasValue && DoctorId.Value > 0)
+        {
+            SelectedDoctor = Doctors.FirstOrDefault(d => d.DoctorID == DoctorId.Value);
+            Appointment.DoctorId = DoctorId.Value;
+        }
+        return Page();
+    });
 
-	private delegate Task<IActionResult> ReturningFunction();
-	private async Task<IActionResult> TryCatch(ReturningFunction returningFunction)
-	{
-		try { return await returningFunction(); }
-		catch (Exception ex) { _ = Task.Run(() => { _logger.LogError(ex, ex.Message); }); return StatusCode(500); }
-	}
+    public Task<IActionResult> OnPost() =>
+    TryCatch(async () =>
+    {
+        if (!ModelState.IsValid)
+        {
+            Doctors = await _appointmentService.GetDoctors(1);
+            return Page();
+        }
+
+        LogModel log = new LogModel { UserName = "patient1@example.com", UserRole = "Patient", IP = Utility.GetIPAddress(Request) };
+        // UserId 1 = seeded patient; in a real app this comes from identity context
+        Appointment.UserId = 1;
+        int id = await _appointmentService.BookAppointment(Appointment, log);
+
+        // Send email notification (non-blocking)
+        _ = _emailService.SendEmailAsync(
+            to: "patient1@example.com",
+            subject: "Appointment Confirmed",
+            body: $"Your appointment (ID: {id}) has been booked for {Appointment.AppointmentDate:dddd, dd MMMM yyyy HH:mm}. Status: Pending."
+        );
+
+        TempData["Success"] = $"Appointment booked successfully! Your booking ID is #{id}.";
+        return RedirectToPage("/Appointment/List");
+    });
+
+    private delegate Task<IActionResult> ReturningFunction();
+    private async Task<IActionResult> TryCatch(ReturningFunction returningFunction)
+    {
+        try { return await returningFunction(); }
+        catch (Exception ex) { _ = Task.Run(() => _logger.LogError(ex, ex.Message)); return StatusCode(500); }
+    }
 }

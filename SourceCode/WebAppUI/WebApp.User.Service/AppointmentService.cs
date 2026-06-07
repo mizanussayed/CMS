@@ -32,7 +32,7 @@ public class AppointmentService : BaseService
                     return true;
                 })
                 .WaitAndRetryAsync(1, retryAttempt => TimeSpan.FromSeconds(2))
-                .ExecuteAsync(async () => await _httpClient.GetAsync($"v1/doctor?pagenumber={pageNumber}"));
+                .ExecuteAsync(async () => await _httpClient.GetAsync($"v2/doctor?pagenumber={pageNumber}"));
 
         switch (response.StatusCode)
         {
@@ -59,13 +59,13 @@ public class AppointmentService : BaseService
                     return true;
                 })
                 .WaitAndRetryAsync(1, retryAttempt => TimeSpan.FromSeconds(2))
-                .ExecuteAsync(async () => await _httpClient.PostAsJsonAsync($"v1/appointment/book", PostData));
+                .ExecuteAsync(async () => await _httpClient.PostAsJsonAsync($"v2/appointment/book", PostData));
 
         switch (response.StatusCode)
         {
             case HttpStatusCode.Created:
                 var model = await response.Content.ReadFromJsonAsync<AppointmentModel>();
-                return model.Id;
+                return model.AppointmentID;
             default:
                 throw new Exception(await response.Content.ReadAsStringAsync());
         }
@@ -82,7 +82,7 @@ public class AppointmentService : BaseService
                     return true;
                 })
                 .WaitAndRetryAsync(1, retryAttempt => TimeSpan.FromSeconds(2))
-                .ExecuteAsync(async () => await _httpClient.GetAsync($"v1/appointment/{userId}"));
+                .ExecuteAsync(async () => await _httpClient.GetAsync($"v2/appointment/{userId}"));
 
         switch (response.StatusCode)
         {
@@ -104,7 +104,7 @@ public class AppointmentService : BaseService
                     return true;
                 })
                 .WaitAndRetryAsync(1, retryAttempt => TimeSpan.FromSeconds(2))
-                .ExecuteAsync(async () => await _httpClient.PutAsJsonAsync($"v1/appointment/cancel/{appointmentId}", logModel));
+                .ExecuteAsync(async () => await _httpClient.PutAsJsonAsync($"v2/appointment/cancel/{appointmentId}", logModel));
 
         if (response.StatusCode != HttpStatusCode.NoContent)
             throw new Exception(await response.Content.ReadAsStringAsync());

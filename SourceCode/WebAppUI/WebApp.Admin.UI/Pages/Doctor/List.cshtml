@@ -1,27 +1,137 @@
 @page
 @model WebApp.Admin.UI.Pages.Doctor.ListModel
+@{
+    ViewData["Title"] = "Doctor Management";
+}
 
-<h2>Doctors</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="mb-0"><i class="fas fa-user-md me-2 text-primary"></i>Doctor Management</h4>
+        <small class="text-muted">Total: @Model.TotalRecords doctors</small>
+    </div>
+    <a asp-page="/Doctor/Upsert" asp-route-id="0" class="btn btn-primary" id="addDoctorBtn">
+        <i class="fas fa-plus me-1"></i> Add Doctor
+    </a>
+</div>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Specialization</th>
-            <th>Available Slots</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.Doctors != null)
-        {
-            foreach (var d in Model.Doctors)
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<!-- Filter bar -->
+<form method="get" class="row g-2 mb-4 align-items-end">
+    <div class="col-md-5">
+        <label class="form-label fw-semibold small">Filter by Specialization</label>
+        <select name="SpecializationFilter" class="form-select" id="adminSpecializationFilter">
+            <option value="">-- All Specializations --</option>
+            @foreach (var s in Model.Specializations)
             {
-                <tr>
-                    <td>@d.Name</td>
-                    <td>@d.Specialization</td>
-                    <td>@d.AvailableSlots</td>
+                <option value="@s" selected="@(Model.SpecializationFilter == s ? "selected" : null)">@s</option>
+            }
+        </select>
+    </div>
+    <input type="hidden" name="PageNumber" value="1" />
+    <div class="col-auto">
+        <button type="submit" class="btn btn-outline-primary" id="adminFilterBtn">
+            <i class="fas fa-filter me-1"></i> Filter
+        </button>
+        <a asp-page="/Doctor/List" class="btn btn-outline-secondary ms-1">Clear</a>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-hover align-middle" id="adminDoctorTable">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Specialization</th>
+                <th>Available Slots</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Doctors.Any())
+            {
+                <tr><td colspan="6" class="text-center text-muted py-4">No doctors found.</td></tr>
+            }
+            @foreach (var d in Model.Doctors)
+            {
+                <tr id="doctor-row-@d.DoctorID">
+                    <td class="text-muted">#@d.DoctorID</td>
+                    <td class="fw-semibold">@d.Name</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(d.Specialization))
+                        {
+                            <span class="badge bg-primary bg-opacity-75">@d.Specialization</span>
+                        }
+                        else { <span class="text-muted">—</span> }
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(d.AvailableSlots))
+                        {
+                            @foreach (var slot in d.AvailableSlots.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                            {
+                                <span class="badge bg-success bg-opacity-75 me-1">@slot.Trim()</span>
+                            }
+                        }
+                        else { <span class="text-muted">—</span> }
+                    </td>
+                    <td class="small text-muted">@d.CreatedDate?.ToString("dd MMM yyyy")</td>
+                    <td>
+                        <a asp-page="/Doctor/Upsert" asp-route-id="@d.DoctorID"
+                           class="btn btn-sm btn-outline-primary me-1" id="edit-doctor-@d.DoctorID">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <form method="post" asp-page-handler="Delete" asp-route-doctorId="@d.DoctorID"
+                              onsubmit="return confirm('Delete Dr. @d.Name? This action cannot be undone.');"
+                              style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-outline-danger" id="delete-doctor-@d.DoctorID">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </button>
+                        </form>
+                    </td>
                 </tr>
             }
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
+
+<!-- Pagination -->
+@if (Model.TotalPages > 1)
+{
+    <nav aria-label="Doctor pagination">
+        <ul class="pagination justify-content-center mt-3">
+            <li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
+                <a class="page-link" asp-page="/Doctor/List"
+                   asp-route-PageNumber="@(Model.PageNumber - 1)"
+                   asp-route-SpecializationFilter="@Model.SpecializationFilter"
+                   id="admin-prev-page">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </li>
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" asp-page="/Doctor/List"
+                       asp-route-PageNumber="@i"
+                       asp-route-SpecializationFilter="@Model.SpecializationFilter"
+                       id="admin-page-@i">@i</a>
+                </li>
+            }
+            <li class="page-item @(!Model.HasNextPage ? "disabled" : "")">
+                <a class="page-link" asp-page="/Doctor/List"
+                   asp-route-PageNumber="@(Model.PageNumber + 1)"
+                   asp-route-SpecializationFilter="@Model.SpecializationFilter"
+                   id="admin-next-page">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+}

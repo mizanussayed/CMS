@@ -34,13 +34,13 @@ public partial class UpsertModel : PageModel
     {
         LogModel log = new LogModel { UserName = User.Identity.Name, UserRole = User.Claims.First(c => c.Type.Contains("role")).Value, IP = Utility.GetIPAddress(Request) };
 
-        if (Doctor.Id == 0)
+        if (Doctor.DoctorID == 0)
         {
             await _doctorService.InsertDoctor(Doctor, log);
         }
         else
         {
-            await _doctorService.UpdateDoctor(Doctor.Id, Doctor, log);
+            await _doctorService.UpdateDoctor(Doctor.DoctorID, Doctor, log);
         }
 
         return RedirectToPage("/Doctor/List");

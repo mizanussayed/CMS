@@ -1,27 +1,89 @@
 @page
 @model WebApp.User.UI.Pages.Appointment.ListModel
+@{
+    ViewData["Title"] = "My Appointments";
+}
 
-<h2>My Appointments</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0"><i class="fas fa-calendar-check me-2 text-primary"></i>My Appointments</h2>
+    <a asp-page="/Appointment/Book" class="btn btn-primary" id="newAppointmentBtn">
+        <i class="fas fa-plus me-1"></i> Book New Appointment
+    </a>
+</div>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Doctor</th>
-            <th>Date</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.Appointments != null)
-        {
-            foreach (var a in Model.Appointments)
-            {
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (Model.Appointments == null || !Model.Appointments.Any())
+{
+    <div class="text-center py-5">
+        <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+        <h5 class="text-muted">No appointments found</h5>
+        <p class="text-muted">You haven't booked any appointments yet.</p>
+        <a asp-page="/Doctor/List" class="btn btn-primary mt-2" id="findDoctorBtn">
+            <i class="fas fa-stethoscope me-1"></i> Find a Doctor
+        </a>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle" id="appointmentsTable">
+            <thead class="table-primary">
                 <tr>
-                    <td>@a.DoctorId</td>
-                    <td>@a.AppointmentDate</td>
-                    <td>@a.Status</td>
+                    <th>#</th>
+                    <th><i class="fas fa-user-md me-1"></i>Doctor</th>
+                    <th><i class="fas fa-calendar me-1"></i>Date &amp; Time</th>
+                    <th><i class="fas fa-info-circle me-1"></i>Status</th>
+                    <th>Actions</th>
                 </tr>
-            }
-        }
-    </tbody>
-</table>
+            </thead>
+            <tbody>
+                @foreach (var a in Model.Appointments)
+                {
+                    var doctorName = Model.DoctorNames.TryGetValue(a.DoctorId, out var name) ? name : $"Doctor #{a.DoctorId}";
+                    var badgeClass = a.Status switch {
+                        "Confirmed" => "bg-success",
+                        "Cancelled" => "bg-danger",
+                        _ => "bg-warning text-dark"
+                    };
+                    <tr id="appointment-row-@a.AppointmentID">
+                        <td class="fw-bold text-muted">#@a.AppointmentID</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
+                                    <i class="fas fa-user-md text-primary"></i>
+                                </div>
+                                <span class="fw-semibold">@doctorName</span>
+                            </div>
+                        </td>
+                        <td>@a.AppointmentDate.ToString("ddd, dd MMM yyyy · HH:mm")</td>
+                        <td><span class="badge @badgeClass px-3 py-2">@(a.Status ?? "Pending")</span></td>
+                        <td>
+                            @if (a.Status != "Cancelled")
+                            {
+                                <form method="post" asp-page-handler="Cancel"
+                                      asp-route-appointmentId="@a.AppointmentID"
+                                      onsubmit="return confirm('Cancel appointment #@a.AppointmentID?');"
+                                      style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" id="cancel-btn-@a.AppointmentID">
+                                        <i class="fas fa-times-circle me-1"></i>Cancel
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span class="text-muted small">—</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

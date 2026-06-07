@@ -33,7 +33,7 @@ public class GetDoctors_Should : IClassFixture<CustomWebApplicationFactory>
         if (_httpClient.DefaultRequestHeaders.Contains("x-hash")) _httpClient.DefaultRequestHeaders.Remove("x-hash");
         _httpClient.DefaultRequestHeaders.Add("x-hash", _securityHelper.GenerateHash("0"));
 
-        var response = await _httpClient.GetAsync($"v1/doctor?pagenumber=0");
+        var response = await _httpClient.GetAsync($"v2/doctor?pagenumber=0");
         var result = JsonSerializer.Deserialize<PaginatedListModel<DoctorModel>>(await response.Content.ReadAsStringAsync(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
