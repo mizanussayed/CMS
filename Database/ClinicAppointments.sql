@@ -10,19 +10,6 @@
 SET ANSI_NULLS ON;
 SET QUOTED_IDENTIFIER ON;
 
-IF OBJECT_ID('dbo.Users', 'U') IS NULL
-BEGIN
-    CREATE TABLE dbo.Users
-    (
-        UserID INT IDENTITY(1,1) PRIMARY KEY,
-        Name NVARCHAR(150) NOT NULL,
-        Email NVARCHAR(200) NOT NULL UNIQUE,
-        Password NVARCHAR(200) NOT NULL,
-        Role NVARCHAR(50) NOT NULL,
-        CreatedDate DATETIME2 DEFAULT SYSUTCDATETIME()
-    );
-END
-
 IF OBJECT_ID('dbo.Doctors', 'U') IS NULL
 BEGIN
     CREATE TABLE dbo.Doctors
@@ -45,7 +32,6 @@ BEGIN
         AppointmentDate DATETIME2 NOT NULL,
         Status NVARCHAR(20) NOT NULL DEFAULT('Pending'),
         CreatedDate DATETIME2 DEFAULT SYSUTCDATETIME(),
-        CONSTRAINT FK_Appointments_Users FOREIGN KEY (UserID) REFERENCES dbo.Users(UserID),
         CONSTRAINT FK_Appointments_Doctors FOREIGN KEY (DoctorID) REFERENCES dbo.Doctors(DoctorID),
         CONSTRAINT CHK_Appointment_Status CHECK (Status IN ('Pending','Confirmed','Cancelled'))
     );
@@ -216,13 +202,20 @@ GO
 IF OBJECT_ID('USP_Appointment_GetAll', 'P') IS NOT NULL
     DROP PROCEDURE USP_Appointment_GetAll;
 GO
-CREATE PROCEDURE USP_Appointment_GetAll
+CREATE PROCEDURE USP_Appointment_GetAll 
+    @PageNumber INT,
+    @PageSize INT,
+    @TotalRecords INT OUTPUT
 AS
 BEGIN
     SET NOCOUNT ON;
+    SELECT @TotalRecords = COUNT(1) FROM dbo.Appointments;
+
     SELECT AppointmentID, UserID, DoctorID, AppointmentDate, Status, CreatedDate
     FROM dbo.Appointments
-    ORDER BY AppointmentDate DESC;
+    ORDER BY AppointmentDate DESC
+    OFFSET (@PageNumber - 1) * @PageSize ROWS
+    FETCH NEXT @PageSize ROWS ONLY;
 END
 GO
 
@@ -267,19 +260,30 @@ BEGIN
 END
 GO
 
+
+
+
+IF OBJECT_ID('USP_Appointment_Delete', 'P') IS NOT NULL
+    DROP PROCEDURE USP_Appointment_Delete;
+GO
+CREATE PROCEDURE USP_Appointment_Delete
+    @Id INT,
+    @UserName NVARCHAR(150) = NULL,
+    @UserRole NVARCHAR(50) = NULL,
+    @IP NVARCHAR(50) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DELETE FROM dbo.Appointments WHERE AppointmentID = @Id;
+    -- Audit logging can be added here
+END
+GO
+
+
 /* ==========================
    Seed minimal data
    ========================== */
 
-IF NOT EXISTS (SELECT 1 FROM dbo.Users WHERE Email = 'patient1@example.com')
-BEGIN
-    INSERT INTO dbo.Users (Name, Email, Password, Role) VALUES ('Patient One', 'patient1@example.com', 'Password123!', 'Patient');
-END
-
-IF NOT EXISTS (SELECT 1 FROM dbo.Users WHERE Email = 'admin@example.com')
-BEGIN
-    INSERT INTO dbo.Users (Name, Email, Password, Role) VALUES ('System Admin', 'admin@example.com', 'AdminPass123!', 'SystemAdmin');
-END
 
 IF NOT EXISTS (SELECT 1 FROM dbo.Doctors WHERE Name = 'Dr. Alice')
 BEGIN

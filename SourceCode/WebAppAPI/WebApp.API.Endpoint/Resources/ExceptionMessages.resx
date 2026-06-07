@@ -168,6 +168,33 @@
   <data name="Category_Update" xml:space="preserve">
     <value>Error updating category.</value>
   </data>
+  <data name="Doctor_Id" xml:space="preserve">
+    <value>Error retrieving doctor by id.</value>
+  </data>
+  <data name="Doctor_Insert" xml:space="preserve">
+    <value>Error inserting new doctor.</value>
+  </data>
+  <data name="Doctor_List" xml:space="preserve">
+    <value>Error retrieving doctors.</value>
+  </data>
+  <data name="Doctor_Update" xml:space="preserve">
+    <value>Error updating doctor.</value>
+  </data>
+  <data name="Appointment_Cancel" xml:space="preserve">
+    <value>Error cancelling appointment.</value>
+  </data>
+  <data name="Appointment_GetAll" xml:space="preserve">
+    <value>Error retrieving appointments.</value>
+  </data>
+  <data name="Appointment_GetByUser" xml:space="preserve">
+    <value>Error retrieving appointments by user.</value>
+  </data>
+  <data name="Appointment_Insert" xml:space="preserve">
+    <value>Error booking new appointment.</value>
+  </data>
+  <data name="Appointment_UpdateStatus" xml:space="preserve">
+    <value>Error updating appointment status.</value>
+  </data>
   <data name="EmailTemplate_List" xml:space="preserve">
     <value>Error retrieving email templates.</value>
   </data>

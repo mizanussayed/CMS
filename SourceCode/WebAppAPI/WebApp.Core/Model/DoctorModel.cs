@@ -4,7 +4,7 @@ namespace WebApp.Core.Model;
 
 public class DoctorModel : AuditModel
 {
-    public int Id { get; set; }
+    public int DoctorID { get; set; }
 
     [Required(ErrorMessage = "Please enter 'Name'.")]
     [MinLength(3, ErrorMessage = "Minimum length of 'Name' is 3 characters.")]
@@ -17,4 +17,5 @@ public class DoctorModel : AuditModel
     // Represent available slots as comma-separated time windows, e.g. "09:00-12:00,14:00-17:00"
     [MaxLength(500, ErrorMessage = "AvailableSlots value is too long.")]
     public string AvailableSlots { get; set; }
+	public List<AppointmentModel> Appointments { get; } = new List<AppointmentModel>();
 }

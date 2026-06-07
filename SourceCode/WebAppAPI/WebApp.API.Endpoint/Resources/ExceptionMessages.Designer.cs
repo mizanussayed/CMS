@@ -212,6 +212,87 @@ namespace WebApp.API.Endpoint.Resources {
                 return ResourceManager.GetString("Category_Update", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Error retrieving doctor by id..
+        /// </summary>
+        public static string Doctor_Id {
+            get {
+                return ResourceManager.GetString("Doctor_Id", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Error inserting new doctor..
+        /// </summary>
+        public static string Doctor_Insert {
+            get {
+                return ResourceManager.GetString("Doctor_Insert", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Error retrieving doctors..
+        /// </summary>
+        public static string Doctor_List {
+            get {
+                return ResourceManager.GetString("Doctor_List", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Error updating doctor..
+        /// </summary>
+        public static string Doctor_Update {
+            get {
+                return ResourceManager.GetString("Doctor_Update", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Error cancelling appointment..
+        /// </summary>
+        public static string Appointment_Cancel {
+            get {
+                return ResourceManager.GetString("Appointment_Cancel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Error retrieving appointments..
+        /// </summary>
+        public static string Appointment_GetAll {
+            get {
+                return ResourceManager.GetString("Appointment_GetAll", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Error retrieving appointments by user..
+        /// </summary>
+        public static string Appointment_GetByUser {
+            get {
+                return ResourceManager.GetString("Appointment_GetByUser", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Error booking new appointment..
+        /// </summary>
+        public static string Appointment_Insert {
+            get {
+                return ResourceManager.GetString("Appointment_Insert", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Error updating appointment status..
+        /// </summary>
+        public static string Appointment_UpdateStatus {
+            get {
+                return ResourceManager.GetString("Appointment_UpdateStatus", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Email could not be sent..

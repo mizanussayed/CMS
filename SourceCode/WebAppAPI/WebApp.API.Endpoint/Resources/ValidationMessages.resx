@@ -183,6 +183,42 @@
   <data name="Category_Null" xml:space="preserve">
     <value>Category is null.</value>
   </data>
+  <data name="Doctor_Duplicate" xml:space="preserve">
+    <value>The doctor '{0}' already exists.</value>
+  </data>
+  <data name="Doctor_InvalidId" xml:space="preserve">
+    <value>Invalid doctor id: {0}.</value>
+  </data>
+  <data name="Doctor_InvalidPageNumber" xml:space="preserve">
+    <value>Invalid doctor page number: {0}.</value>
+  </data>
+  <data name="Doctor_Mismatch" xml:space="preserve">
+    <value>Doctor Id mismatch.</value>
+  </data>
+  <data name="Doctor_NotFoundId" xml:space="preserve">
+    <value>No doctor found with id: {0}.</value>
+  </data>
+  <data name="Doctor_NotFoundList" xml:space="preserve">
+    <value>No doctors found.</value>
+  </data>
+  <data name="Doctor_Null" xml:space="preserve">
+    <value>Doctor is null.</value>
+  </data>
+  <data name="Appointment_InvalidId" xml:space="preserve">
+    <value>Invalid appointment id: {0}.</value>
+  </data>
+  <data name="Appointment_NotFoundId" xml:space="preserve">
+    <value>No appointment found with id: {0}.</value>
+  </data>
+  <data name="Appointment_NotFoundList" xml:space="preserve">
+    <value>No appointments found.</value>
+  </data>
+  <data name="Appointment_Null" xml:space="preserve">
+    <value>Appointment is null.</value>
+  </data>
+  <data name="Appointment_StatusNullOrEmpty" xml:space="preserve">
+    <value>Appointment status is null or empty.</value>
+  </data>
   <data name="EmailTemplate_InvalidId" xml:space="preserve">
     <value>Invalid email template id: {0}.</value>
   </data>

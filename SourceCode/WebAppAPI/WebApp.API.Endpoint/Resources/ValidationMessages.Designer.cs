@@ -257,6 +257,114 @@ namespace WebApp.API.Endpoint.Resources {
                 return ResourceManager.GetString("Category_Null", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The doctor &apos;{0}&apos; already exists..
+        /// </summary>
+        public static string Doctor_Duplicate {
+            get {
+                return ResourceManager.GetString("Doctor_Duplicate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid appointment id: {0}..
+        /// </summary>
+        public static string Appointment_InvalidId {
+            get {
+                return ResourceManager.GetString("Appointment_InvalidId", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No appointment found with id: {0}..
+        /// </summary>
+        public static string Appointment_NotFoundId {
+            get {
+                return ResourceManager.GetString("Appointment_NotFoundId", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No appointments found..
+        /// </summary>
+        public static string Appointment_NotFoundList {
+            get {
+                return ResourceManager.GetString("Appointment_NotFoundList", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Appointment is null..
+        /// </summary>
+        public static string Appointment_Null {
+            get {
+                return ResourceManager.GetString("Appointment_Null", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Appointment status is null or empty..
+        /// </summary>
+        public static string Appointment_StatusNullOrEmpty {
+            get {
+                return ResourceManager.GetString("Appointment_StatusNullOrEmpty", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid doctor id: {0}..
+        /// </summary>
+        public static string Doctor_InvalidId {
+            get {
+                return ResourceManager.GetString("Doctor_InvalidId", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid doctor page number: {0}..
+        /// </summary>
+        public static string Doctor_InvalidPageNumber {
+            get {
+                return ResourceManager.GetString("Doctor_InvalidPageNumber", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Doctor Id mismatch..
+        /// </summary>
+        public static string Doctor_Mismatch {
+            get {
+                return ResourceManager.GetString("Doctor_Mismatch", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No doctor found with id: {0}..
+        /// </summary>
+        public static string Doctor_NotFoundId {
+            get {
+                return ResourceManager.GetString("Doctor_NotFoundId", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No doctors found..
+        /// </summary>
+        public static string Doctor_NotFoundList {
+            get {
+                return ResourceManager.GetString("Doctor_NotFoundList", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Doctor is null..
+        /// </summary>
+        public static string Doctor_Null {
+            get {
+                return ResourceManager.GetString("Doctor_Null", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to To, Subject or Body is empty. Property can not be empty..

@@ -13,8 +13,9 @@ public class DoctorRepository : IDoctorRepository
     private readonly IConfiguration _config;
     private readonly IMemoryCache _cache;
     private const string DoctorCache = "DoctorData";
+	private const string DistinctDoctorCache = "DistinctDoctorData";
 
-    public DoctorRepository(IDataAccessHelper dataAccessHelper, IConfiguration config, IMemoryCache cache)
+	public DoctorRepository(IDataAccessHelper dataAccessHelper, IConfiguration config, IMemoryCache cache)
     {
         this._dataAccessHelper = dataAccessHelper;
         this._config = config;
@@ -59,19 +60,33 @@ public class DoctorRepository : IDoctorRepository
         return output;
     }
 
-    public async Task<List<DoctorModel>> GetDistinctSpecializations()
-    {
-        return await _dataAccessHelper.QueryData<DoctorModel, dynamic>("USP_Doctor_GetDistinctSpecializations", new { });
-    }
-
     public async Task<DoctorModel> GetDoctorById(int doctorId)
     {
         return (await _dataAccessHelper.QueryData<DoctorModel, dynamic>("USP_Doctor_GetById", new { Id = doctorId })).FirstOrDefault();
     }
 
-    public async Task<int> InsertDoctor(DoctorModel doctor, LogModel logModel)
+	public async Task<DoctorModel> GetDoctorByName(string doctorName)
+	{
+		return (await _dataAccessHelper.QueryData<DoctorModel, dynamic>("USP_Doctor_GetByName", new { Name = doctorName })).FirstOrDefault();
+	}
+
+	public async Task<List<DoctorModel>> GetDistinctSpecializations()
+	{
+		var output = _cache.Get<List<DoctorModel>>(DistinctDoctorCache);
+
+		if (output is null)
+		{
+			output = await _dataAccessHelper.QueryData<DoctorModel, dynamic>("USP_Doctor_GetDistinctSpecializations", new { });
+			_cache.Set(DistinctDoctorCache, output, TimeSpan.FromMinutes(Convert.ToInt32(_config["SiteSettings:ExpirationTime"])));
+		}
+
+		return output;
+	}
+
+	public async Task<int> InsertDoctor(DoctorModel doctor, LogModel logModel)
     {
         ClearCache(DoctorCache);
+        ClearCache(DistinctDoctorCache);
 
         DynamicParameters p = new DynamicParameters();
         p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
@@ -90,9 +105,10 @@ public class DoctorRepository : IDoctorRepository
     public async Task UpdateDoctor(DoctorModel doctor, LogModel logModel)
     {
         ClearCache(DoctorCache);
+        ClearCache(DistinctDoctorCache);
 
         DynamicParameters p = new DynamicParameters();
-        p.Add("Id", doctor.Id);
+        p.Add("Id", doctor.DoctorID);
         p.Add("Name", doctor.Name);
         p.Add("Specialization", doctor.Specialization);
         p.Add("AvailableSlots", doctor.AvailableSlots);
@@ -107,6 +123,7 @@ public class DoctorRepository : IDoctorRepository
     public async Task DeleteDoctor(int doctorId, LogModel logModel)
     {
         ClearCache(DoctorCache);
+        ClearCache(DistinctDoctorCache);
 
         DynamicParameters p = new DynamicParameters();
         p.Add("Id", doctorId);
@@ -121,8 +138,7 @@ public class DoctorRepository : IDoctorRepository
     {
         return await _dataAccessHelper.QueryData<DoctorModel, dynamic>("USP_Doctor_Export", new { });
     }
-
-    private void ClearCache(string key)
+	private void ClearCache(string key)
     {
         var keys = _cache.Get<List<string>>(key);
         if (keys is not null)
