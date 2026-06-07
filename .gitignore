@@ -9,3 +9,5 @@
 *.vssscc
 *.dbmdl
 *.bak
+/Database/WebApp.ldf
+*.mdf
