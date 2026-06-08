@@ -61,7 +61,7 @@ public partial class BookModel : PageModel
             body: $"Your appointment (ID: {id}) has been booked for {Appointment.AppointmentDate:dddd, dd MMMM yyyy HH:mm}. Status: Pending."
         );
 
-        TempData["Success"] = $"Appointment booked successfully! Your booking ID is #{id}.";
+        TempData["Success"] = $"Appointment booked successfully!";
         return RedirectToPage("/Appointment/List");
     });
 

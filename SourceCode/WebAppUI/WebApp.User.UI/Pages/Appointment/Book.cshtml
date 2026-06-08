@@ -53,16 +53,15 @@
                         <label asp-for="Appointment.AppointmentDate" class="form-label fw-semibold">
                             <i class="fas fa-calendar-alt me-1 text-primary"></i>Appointment Date &amp; Time
                         </label>
-                        <input asp-for="Appointment.AppointmentDate" type="datetime-local" class="form-control form-control-lg" id="appointmentDate"
-                               min="@DateTime.Now.AddHours(1).ToString("yyyy-MM-ddTHH:mm")" />
+                        <input asp-for="Appointment.AppointmentDate" type="datetime-local" class="form-control form-control"  />
                         <span asp-validation-for="Appointment.AppointmentDate" class="text-danger small"></span>
                     </div>
 
                     <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
-                        <a asp-page="/Doctor/List" class="btn btn-outline-secondary btn-lg" id="cancelBookBtn">
+                        <a asp-page="/Doctor/List" class="btn btn-outline-secondary" id="cancelBookBtn">
                             <i class="fas fa-arrow-left me-1"></i> Back to Doctors
                         </a>
-                        <button type="submit" class="btn btn-primary btn-lg" id="submitBookBtn">
+                        <button type="submit" class="btn btn-primary" id="submitBookBtn">
                             <i class="fas fa-check-circle me-1"></i> Confirm Booking
                         </button>
                     </div>

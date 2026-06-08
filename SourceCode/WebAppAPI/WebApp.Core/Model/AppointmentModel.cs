@@ -17,4 +17,6 @@ public class AppointmentModel : AuditModel
 
     [MaxLength(50)]
     public string Status { get; set; }
+	public string UserName { get; set; } = string.Empty;
+	public string DoctorName { get; set; } = string.Empty;
 }

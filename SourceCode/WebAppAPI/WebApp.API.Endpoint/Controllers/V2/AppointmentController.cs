@@ -115,7 +115,8 @@ public partial class AppointmentController : ControllerBase
 		return NoContent();
 	});
 
-	[HttpPut("cancel/{appointmentId:int}"), Authorize]
+	[HttpPut("cancel/{appointmentId:int}"), AllowAnonymous]
+	//[HttpPut("cancel/{appointmentId:int}"), Authorize]
 	public Task<IActionResult> CancelAppointment(int appointmentId, [FromBody] LogModel logModel) =>
 	TryCatch(async () =>
 	{

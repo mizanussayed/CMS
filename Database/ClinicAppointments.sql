@@ -75,6 +75,36 @@ BEGIN
 END
 GO
 
+
+IF OBJECT_ID('USP_Doctor_GetByName', 'P') IS NOT NULL
+    DROP PROCEDURE USP_Doctor_GetByName;
+GO
+CREATE PROCEDURE USP_Doctor_GetByName
+    @Name NVARCHAR(150)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT DoctorID, Name, Specialization, AvailableSlots, CreatedDate
+    FROM dbo.Doctors
+    WHERE upper(Name) = upper(@Name);
+END
+
+
+GO
+    @TotalRecords INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT @TotalRecords = COUNT(1) FROM dbo.Appointments;
+
+    SELECT AppointmentID, UserID, DoctorID, AppointmentDate, Status, CreatedDate
+    FROM dbo.Appointments
+    ORDER BY AppointmentDate DESC
+    OFFSET (@PageNumber - 1) * @PageSize ROWS
+    FETCH NEXT @PageSize ROWS ONLY;
+END
+GO
+
 IF OBJECT_ID('USP_Doctor_Insert', 'P') IS NOT NULL
     DROP PROCEDURE USP_Doctor_Insert;
 GO
@@ -211,8 +241,9 @@ BEGIN
     SET NOCOUNT ON;
     SELECT @TotalRecords = COUNT(1) FROM dbo.Appointments;
 
-    SELECT AppointmentID, UserID, DoctorID, AppointmentDate, Status, CreatedDate
-    FROM dbo.Appointments
+    SELECT a.AppointmentID, a.UserID, a.DoctorID, a.AppointmentDate, a.Status, a.CreatedDate, d.Name AS DoctorName, 'test user' AS UserName
+    FROM dbo.Appointments a
+    LEFT JOIN dbo.Doctors d ON a.DoctorID = d.DoctorID
     ORDER BY AppointmentDate DESC
     OFFSET (@PageNumber - 1) * @PageSize ROWS
     FETCH NEXT @PageSize ROWS ONLY;
@@ -248,15 +279,8 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Ensure caller is owner of the appointment or called by admin (role check optional in app layer)
-    IF EXISTS (SELECT 1 FROM dbo.Users u JOIN dbo.Appointments a ON u.UserID = a.UserID WHERE a.AppointmentID = @Id AND u.Name = @UserName)
-    BEGIN
-        UPDATE dbo.Appointments SET Status = 'Cancelled' WHERE AppointmentID = @Id;
-    END
-    ELSE
-    BEGIN
-        RAISERROR('Unauthorized to cancel this appointment', 16, 1);
-    END
+    UPDATE dbo.Appointments SET Status = 'Cancelled' WHERE AppointmentID = @Id;
+   
 END
 GO
 

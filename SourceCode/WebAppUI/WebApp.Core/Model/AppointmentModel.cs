@@ -12,9 +12,12 @@ public class AppointmentModel : AuditModel
     [Required(ErrorMessage = "Please provide DoctorId.")]
     public int DoctorId { get; set; }
 
-    [Required(ErrorMessage = "Please provide AppointmentDate.")]
-    public DateTime AppointmentDate { get; set; }
+	[Required(ErrorMessage = "Please provide AppointmentDate.")]
+	public DateTime AppointmentDate { get; set; } = DateTime.Now.AddHours(1);
 
     [MaxLength(50)]
     public string Status { get; set; }
+
+	public string UserName { get; set; } = string.Empty;
+	public string DoctorName { get; set; } = string.Empty;
 }

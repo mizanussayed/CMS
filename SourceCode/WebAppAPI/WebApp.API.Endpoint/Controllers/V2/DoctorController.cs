@@ -93,8 +93,8 @@ public partial class DoctorController : ControllerBase
 		if (!ModelState.IsValid) return BadRequest(ModelState);
 
 
-		var existingCategory = await _doctorRepository.GetDoctorByName(doctor.Name);
-		if (existingCategory != null)
+		var existingDoctor = await _doctorRepository.GetDoctorByName(doctor.Name);
+		if (existingDoctor != null)
 		{
 			ModelState.AddModelError("Duplicate Doctor", String.Format(ValidationMessages.Doctor_Duplicate, doctor.Name));
 			return BadRequest(String.Format(ValidationMessages.Doctor_Duplicate, doctor.Name));
