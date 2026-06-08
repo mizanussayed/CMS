@@ -57,14 +57,14 @@
 				<li class="nav-item has-treeview @OpenCategoryQ("doc")">
 					<a href="#" class="nav-link @ActiveCategoryQ("doc")"><i class="fa-solid fa-object-ungroup fa-sm me-2"></i><p>Doctor<i class="right fas fa-angle-left"></i></p></a>
 					<ul class="nav nav-treeview medium">
-						<li class="nav-item"><a asp-page="/Doctor/List" asp-route-c="cat" asp-route-p="docl" class="nav-link @ActivePageQ("catl")"><i class="fas fa-caret-right me-2"></i><p>Doctor List</p></a></li>
-						<li class="nav-item"><a asp-page="/Doctor/Upsert" asp-route-c="cat" asp-route-p="docu" class="nav-link @ActivePageQ("catu")"><i class="fas fa-caret-right me-2"></i><p>Create/Update Doctor</p></a></li>
+						<li class="nav-item"><a asp-page="/Doctor/List" asp-route-c="doc" asp-route-p="docl" class="nav-link @ActivePageQ("docl")"><i class="fas fa-caret-right me-2"></i><p>Doctor List</p></a></li>
+						<li class="nav-item"><a asp-page="/Doctor/Upsert" asp-route-c="doc" asp-route-p="docu" class="nav-link @ActivePageQ("docu")"><i class="fas fa-caret-right me-2"></i><p>Create/Update Doctor</p></a></li>
 					</ul>
 				</li>
 				<li class="nav-item has-treeview @OpenCategoryQ("app")">
 					<a href="#" class="nav-link @ActiveCategoryQ("app")"><i class="fa-solid fa-object-ungroup fa-sm me-2"></i><p>Appointment<i class="right fas fa-angle-left"></i></p></a>
 					<ul class="nav nav-treeview medium">
-						<li class="nav-item"><a asp-page="/Appointment/List" asp-route-c="cat" asp-route-p="docl" class="nav-link @ActivePageQ("appl")"><i class="fas fa-caret-right me-2"></i><p>Appointment List</p></a></li>
+						<li class="nav-item"><a asp-page="/Appointment/List" asp-route-c="app" asp-route-p="app" class="nav-link @ActivePageQ("appl")"><i class="fas fa-caret-right me-2"></i><p>Appointment List</p></a></li>
 					</ul>
 				</li>
 

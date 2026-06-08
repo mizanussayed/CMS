@@ -241,7 +241,7 @@ BEGIN
     SET NOCOUNT ON;
     SELECT @TotalRecords = COUNT(1) FROM dbo.Appointments;
 
-    SELECT a.AppointmentID, a.UserID, a.DoctorID, a.AppointmentDate, a.Status, a.CreatedDate, d.Name AS DoctorName, 'test user' AS UserName
+    SELECT a.AppointmentID, a.UserID, a.DoctorID, a.AppointmentDate, a.Status, a.CreatedDate, d.Name AS DoctorName, 'patient1@example.com' AS UserName
     FROM dbo.Appointments a
     LEFT JOIN dbo.Doctors d ON a.DoctorID = d.DoctorID
     ORDER BY AppointmentDate DESC
